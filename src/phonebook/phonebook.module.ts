@@ -1,18 +1,14 @@
+// src/phonebook/phonebook.module.ts
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { PhonebookController } from './phonebook.controller';
 import { PhonebookService } from './phonebook.service';
-import { Contact } from './contact.entity';
-import { User } from './user.entity';
-//import { UserModule } from './user.module';
-import { UserService } from './user.service';
+import { UserModule } from '../user/user.module';
+import { ContactModule } from '../contact/contact.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Contact, User]),
-    // UserModule
-  ],
+  imports: [UserModule, ContactModule],
   controllers: [PhonebookController],
-  providers: [PhonebookService, UserService],
+  providers: [PhonebookService],
+  exports: [PhonebookService],
 })
 export class PhonebookModule {}
