@@ -12,6 +12,10 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
+  async findByName(name: string) {
+    return this.userRepository.findOne({ where: { name } });
+  }
+
   async create(dto: CreateUserDto): Promise<User> {
     const user = this.userRepository.create(dto);
     return this.userRepository.save(user);

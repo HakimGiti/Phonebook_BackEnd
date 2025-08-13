@@ -14,20 +14,6 @@ export class PhonebookService {
   async getPhonebook(): Promise<
     { id: number; name: string; phone: string | null }[]
   > {
-    // const users = await this.userService.findAll(); // users با contacts
-    // // همه کانتکت‌ها را جدا می‌کنیم و همراه با نام یوزر به یک آرایه flat تبدیل می‌کنیم
-    // const phonebook = users.flatMap((user) =>
-    //   user.contacts.map((contact) => ({
-    //     id: contact.id,
-    //     name: user.name,
-    //     phone: contact.phone,
-    //   })),
-    // );
-    // //  فیلتر : فقط کانتکت‌هایی که شماره دارند
-    // return phonebook.filter(
-    //   (entry) => entry.phone !== null && entry.phone !== '',
-    // );
-
     const contacts = await this.contactService.findAllWithUsers();
     const phonebook = contacts
       .filter((contact) => contact.phone !== null && contact.phone !== '')

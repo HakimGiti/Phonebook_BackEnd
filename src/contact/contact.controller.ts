@@ -10,14 +10,18 @@ import {
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
+import { UserService } from '../user/user.service'; // اضافه شد
 
-@Controller('contacts') // بهتره جمع باشه برای API
+@Controller('contacts')
 export class ContactController {
-  constructor(private readonly contactService: ContactService) {}
+  constructor(
+    private readonly contactService: ContactService,
+    private readonly userService: UserService, // اضافه شد
+  ) {}
 
   @Get()
   async findAll() {
-    return this.contactService.findAll(); // خروجی JSON
+    return this.contactService.findAll();
   }
 
   @Get('users-with-contacts')
@@ -32,7 +36,22 @@ export class ContactController {
 
   @Post()
   async create(@Body() dto: CreateContactDto) {
-    return this.contactService.create(dto);
+    let userId = dto.userId;
+
+    // اگر کاربر جدید بود
+    if (!userId && dto.userName) {
+      let user = await this.userService.findByName(dto.userName);
+      if (!user) {
+        user = await this.userService.create({ name: dto.userName });
+      }
+      userId = user.id;
+    }
+
+    // حالا Contact رو ثبت کن
+    return this.contactService.create({
+      ...dto,
+      userId,
+    });
   }
 
   @Put(':id')

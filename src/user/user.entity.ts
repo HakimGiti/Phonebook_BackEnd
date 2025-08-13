@@ -1,3 +1,4 @@
+// /src/user/user.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Contact } from '../contact/contact.entity';
 
@@ -7,25 +8,25 @@ export class User {
   id: number;
 
   @Column({ length: 100 })
-  name: string;
+  name: string; // اجباری
 
-  @Column({ unique: true, length: 50 })
-  username: string;
+  @Column({ nullable: true, length: 50 })
+  username?: string;
 
-  @Column()
-  password: string;
+  @Column({ nullable: true })
+  password?: string;
 
-  @Column({ unique: true, length: 10 })
-  nationalCode: string;
+  @Column({ unique: true, length: 10, nullable: true })
+  nationalCode?: string;
 
-  @Column({ unique: true })
-  nationalId: string;
+  @Column({ nullable: true })
+  nationalId?: string;
 
-  @Column({ length: 100 })
-  job: string;
+  @Column({ nullable: true, type: 'enum', enum: ['male', 'female'] })
+  gender?: 'male' | 'female';
 
-  @Column({ type: 'enum', enum: ['male', 'female'] })
-  gender: 'male' | 'female';
+  @Column({ nullable: true, length: 100 })
+  job?: string;
 
   @OneToMany(() => Contact, (contact) => contact.user)
   contacts: Contact[];

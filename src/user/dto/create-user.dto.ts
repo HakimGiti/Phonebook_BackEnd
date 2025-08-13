@@ -1,3 +1,4 @@
+// /src/user/dto/create-user.dto.ts
 import {
   IsString,
   IsNotEmpty,
@@ -20,7 +21,7 @@ export class CreateUserDto {
     message:
       'Username must start with a letter or underscore, can contain letters, numbers, underscores, and dots; dots cannot be at start/end or be consecutive.',
   })
-  username: string;
+  username?: string;
 
   @IsString()
   @IsNotEmpty()
@@ -32,23 +33,23 @@ export class CreateUserDto {
         'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
     },
   )
-  password: string;
+  password?: string;
 
   @IsString()
   @Matches(/^\d{10}$/, { message: 'شناسه ملی باید دقیقا ۱۰ رقم باشد' })
-  nationalCode: string;
+  nationalCode?: string;
 
   @IsString()
   @IsNotEmpty()
-  job: string;
+  job?: string;
 
   @IsString()
   @IsIn(['male', 'female'])
-  gender: 'male' | 'female';
+  gender?: 'male' | 'female';
 
   @IsString()
   @IsNotEmpty()
   @Matches(/^\d{10}$/, { message: 'شناسه ملی باید دقیقا ۱۰ رقم باشد' })
   @IsNumberString()
-  nationalId: string;
+  nationalId?: string;
 }
