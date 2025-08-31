@@ -1,4 +1,4 @@
-// /src/contact/contact.entity.ts
+// src/contact/contact.entity.ts
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -17,7 +17,8 @@ export class Contact {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @Column({ length: 15 })
+  // @Column({ length: 11 })
+  @Column({ length: 11, unique: true, nullable: false })
   phone: string;
 
   @Column({ nullable: true })

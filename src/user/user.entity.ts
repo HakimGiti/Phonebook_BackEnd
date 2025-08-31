@@ -1,4 +1,4 @@
-// /src/user/user.entity.ts
+// src/user/user.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { Contact } from '../contact/contact.entity';
 

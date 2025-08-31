@@ -1,3 +1,5 @@
+// /src/user/user.controller.ts
+
 import {
   Controller,
   Get,
@@ -6,6 +8,9 @@ import {
   Param,
   Delete,
   Put,
+  Query,
+  ParseIntPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -25,9 +30,15 @@ export class UserController {
     return this.userService.findAll();
   }
 
+  @Get('search')
+  searchUsers(@Query('q') q: string) {
+    if (!q) throw new BadRequestException('Query is required');
+    return this.userService.searchByName(q); // یا روش مشابه
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.findOne(id);
   }
 
   @Put(':id')
@@ -36,7 +47,7 @@ export class UserController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.remove(id);
   }
 }

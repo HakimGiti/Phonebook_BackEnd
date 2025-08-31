@@ -1,4 +1,4 @@
-// /src/contact/dto/create-contact.dto.ts
+// src/contact/dto/create-contact.dto.ts
 import {
   IsNotEmpty,
   IsInt,
@@ -14,13 +14,15 @@ export class CreateContactDto {
   // @ValidateIf((o) => !o.userName)
   // @IsNotEmpty({ message: 'userId یا userName باید وارد شود' })
   @IsOptional()
-  @IsInt()
   @Type(() => Number)
+  @IsInt()
   userId?: number;
 
   // اعتبارسنجی شرطی: حداقل یکی از userId یا userName باید باشد
   @ValidateIf((o) => !o.userId)
   @IsNotEmpty({ message: 'اگر کاربر موجود نیست، userName الزامی است.' })
+  @IsOptional()
+  @IsString()
   userName?: string;
 
   //@Matches(/^\d{10}$/, { message: 'Phone number must be exactly 10 digits.' })

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like } from 'typeorm';
 import { User } from './user/user.entity';
 
 @Injectable()
@@ -32,5 +32,15 @@ export class UserService {
 
   async remove(id: number): Promise<void> {
     await this.userRepository.delete(id);
+  }
+
+  // جستجوی کاربر بر اساس نام (Partial match)
+  async searchByName(name: string): Promise<User[]> {
+    if (!name) return [];
+    return this.userRepository.find({
+      where: { name: Like(`%${name}%`) },
+      take: 10, // حداکثر 10 نتیجه
+      relations: ['contacts'],
+    });
   }
 }

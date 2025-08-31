@@ -1,3 +1,4 @@
+// /src/contact/contact.controller.ts
 import {
   Controller,
   Get,
@@ -6,11 +7,16 @@ import {
   Delete,
   Param,
   Body,
+  Query,
+  //ConflictException,
+  // BadRequestException,
+  // InternalServerErrorException,
 } from '@nestjs/common';
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
 import { UserService } from '../user/user.service'; // اضافه شد
+import { BulkUpdateContactDto } from './dto/updatebulk-contact.dto';
 
 @Controller('contacts')
 export class ContactController {
@@ -31,32 +37,29 @@ export class ContactController {
 
   @Get(':id')
   async findOne(@Param('id') id: number) {
+    console.log('findOne_id=', id);
     return this.contactService.findOne(id);
+  }
+
+  @Get('search-phone')
+  async searchPhone(@Query('phone') phone: string) {
+    if (!phone) return [];
+    return this.contactService.searchByPhone(phone);
   }
 
   @Post()
   async create(@Body() dto: CreateContactDto) {
-    let userId = dto.userId;
-
-    // اگر کاربر جدید بود
-    if (!userId && dto.userName) {
-      let user = await this.userService.findByName(dto.userName);
-      if (!user) {
-        user = await this.userService.create({ name: dto.userName });
-      }
-      userId = user.id;
-    }
-
-    // حالا Contact رو ثبت کن
-    return this.contactService.create({
-      ...dto,
-      userId,
-    });
+    return this.contactService.create(dto);
   }
 
   @Put(':id')
   async update(@Param('id') id: number, @Body() dto: UpdateContactDto) {
     return this.contactService.update(id, dto);
+  }
+
+  @Put('bulk')
+  async bulkUpdate(@Body() dtos: BulkUpdateContactDto[]) {
+    return this.contactService.updateBulk(dtos);
   }
 
   @Delete(':id')
