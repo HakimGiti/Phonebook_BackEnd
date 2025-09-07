@@ -25,9 +25,10 @@ export class CreateContactDto {
   @IsString()
   userName?: string;
 
-  //@Matches(/^\d{10}$/, { message: 'Phone number must be exactly 10 digits.' })
   @IsNotEmpty()
-  @Matches(/^[0-9]{11}$/, { message: 'Phone number must be 11 digits' })
+  @Matches(/^0[0-9]{10}$/, {
+    message: 'شماره تلفن باید ۱۱ رقم باشد و با 0 شروع شود .',
+  })
   @IsString()
   phone: string;
 

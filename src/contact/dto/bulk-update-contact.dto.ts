@@ -1,21 +1,29 @@
 // src/contact/dto/bulk-update-contact.dto.ts
-import { IsInt, IsOptional, IsString, Matches } from 'class-validator';
+import {
+  IsInt,
+  IsOptional,
+  IsString,
+  IsEmail,
+  ValidateNested,
+  Matches,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class BulkUpdateContactDto {
+export class SingleUpdateContactDto {
+  @IsOptional()
   @IsInt()
   @Type(() => Number)
-  id: number;
+  id?: number;
 
   @IsOptional()
+  @IsString()
   @Matches(/^0[0-9]{10}$/, {
     message: 'شماره تلفن باید ۱۱ رقم باشد و با 0 شروع شود .',
   })
-  @IsString()
   phone?: string;
 
   @IsOptional()
-  @IsString()
+  @IsEmail()
   email?: string;
 
   @IsOptional()
@@ -24,6 +32,15 @@ export class BulkUpdateContactDto {
 
   @IsOptional()
   @IsInt()
-  @Type(() => Number)
   userId?: number;
+
+  @IsOptional()
+  @IsString()
+  userName?: string;
+}
+
+export class BulkUpdateContactsDto {
+  @ValidateNested({ each: true })
+  @Type(() => SingleUpdateContactDto)
+  contacts: SingleUpdateContactDto[];
 }

@@ -13,7 +13,10 @@ export class Contact {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => User, (user) => user.contacts, { onDelete: 'CASCADE' })
+  @ManyToOne(() => User, (user) => user.contacts, {
+    onDelete: 'CASCADE',
+    eager: true,
+  })
   @JoinColumn({ name: 'user_id' })
   user: User;
 

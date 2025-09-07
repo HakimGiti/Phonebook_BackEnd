@@ -8,6 +8,8 @@ import {
   Param,
   Body,
   Query,
+  UsePipes,
+  ValidationPipe,
   //ConflictException,
   // BadRequestException,
   // InternalServerErrorException,
@@ -15,8 +17,8 @@ import {
 import { ContactService } from './contact.service';
 import { CreateContactDto } from './dto/create-contact.dto';
 import { UpdateContactDto } from './dto/update-contact.dto';
-import { UserService } from '../user/user.service'; // اضافه شد
-import { BulkUpdateContactDto } from './dto/updatebulk-contact.dto';
+import { UserService } from '../user/user.service';
+import { BulkUpdateContactsDto } from './dto/bulk-update-contact.dto';
 
 @Controller('contacts')
 export class ContactController {
@@ -25,8 +27,15 @@ export class ContactController {
     private readonly userService: UserService, // اضافه شد
   ) {}
 
+  // @Get()
+  // async findAll() {
+  //   return this.contactService.findAll();
+  // }
   @Get()
-  async findAll() {
+  async findAll(@Query('userId') userId?: number) {
+    if (userId) {
+      return this.contactService.findOne(userId);
+    }
     return this.contactService.findAll();
   }
 
@@ -57,9 +66,10 @@ export class ContactController {
     return this.contactService.update(id, dto);
   }
 
-  @Put('bulk')
-  async bulkUpdate(@Body() dtos: BulkUpdateContactDto[]) {
-    return this.contactService.updateBulk(dtos);
+  @Post('bulk')
+  @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
+  async bulkUpdate(@Body() dtoss: BulkUpdateContactsDto) {
+    return this.contactService.bulkUpdate(dtoss);
   }
 
   @Delete(':id')
